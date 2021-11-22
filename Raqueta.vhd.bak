@@ -1,0 +1,107 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+----------------
+ENTITY Raqueta IS
+    GENERIC(N : INTEGER := 28);
+    PORT (
+	     clk   : IN  STD_LOGIC;                
+        rst   : IN  STD_LOGIC;
+        columnas : OUT STD_LOGIC_VECTOR(16 DOWNTO 1); 
+		  filas    : OUT STD_LOGIC_VECTOR(8 DOWNTO 1); 
+		  filas_2  : OUT STD_LOGIC_VECTOR(8 DOWNTO 1);
+		  SEG7    : OUT STD_LOGIC_VECTOR (6 DOWNTO 0); 
+	     );
+END ENTITY;
+ARCHITECTURE movimiento OF Raqueta IS 
+SIGNAL Timer_EI_Maxtick,Timer_E1_Maxtick,Timer_E2_Maxtick,Timer_E3_Maxtick,Timer_E4_Maxtick,Timer_E5_Maxtick :	STD_LOGIC;
+SIGNAL ena_Timer_EI,ena_Timer_E1,ena_Timer_E2,ena_Timer_E3,ena_Timer_E4,ena_Timer_E5 :	STD_LOGIC;
+SIGNAL syn_clr_Timer_EI_S,syn_clr_Timer_E1_S,syn_clr_Timer_E2_S,syn_clr_Timer_E3_S,syn_clr_Timer_E4_S,syn_clr_Timer_E5_S :	STD_LOGIC;
+CONSTANT Millo_25	   : UNSIGNED (N-1 DOWNTO 0) := "0001011111010111100001000000";
+
+BEGIN
+
+ENTITY WORK.prueba_raqueta
+PORT MAP (
+				reset 				   => reset,
+				clk      				=> clk,
+				OPE_1						=> OPE_1,
+				OPE_2					   => OPE_2,
+				Timer_EI_Maxtick		=> Timer_EI_Maxtick,
+				Timer_E1_Maxtick		=> Timer_E1_Maxtick,
+				Timer_E2_Maxtick		=> Timer_E2_Maxtick,
+				Timer_E3_Maxtick		=> Timer_E3_Maxtick,
+				Timer_E4_Maxtick		=> Timer_E4_Maxtick,
+				Timer_E5_Maxtick		=> Timer_E5_Maxtick,
+				ena_Timer_EI			=> ena_Timer_EI,
+				ena_Timer_E1			=> ena_Timer_E1,
+				ena_Timer_E2			=> ena_Timer_E2,
+				ena_Timer_E3		   => ena_Timer_E3,
+				ena_Timer_E4			=> ena_Timer_E4,
+				ena_Timer_E5			=> ena_Timer_E5,
+				syn_clr_Timer_EI		=> syn_clr_Timer_EI_S,
+				syn_clr_Timer_E1		=> syn_clr_Timer_E1_S,
+				syn_clr_Timer_E2		=> syn_clr_Timer_E2_S,
+				syn_clr_Timer_E3		=> syn_clr_Timer_E3_S,
+				syn_clr_Timer_E4		=> syn_clr_Timer_E4_S,
+				syn_clr_Timer_E5		=> syn_clr_Timer_E5_S,
+				columnas 				=> columnas,
+				filas  				   => filas,
+				filas_2				   => filas_2,
+				SEG7    					=> SEG7);
+
+TimerI: ENTITY WORK.univ_bin_c
+               GENERIC MAP	(	N	  => N)
+				   PORT MAP    (clk       => clk,
+									 rst       => reset,
+									 ena       => ena_Timer_EI,
+									 syn_clr   => syn_clr_Timer_EI_S,
+									 max_tick  =>  Timer_EI_Maxtick,
+									 MAX_COUNT => STD_LOGIC_VECTOR(Millo_25));	
+
+Timer1: ENTITY WORK.univ_bin_c
+               GENERIC MAP	(	N	  => N)
+				   PORT MAP    (clk       => clk,
+									 rst       => reset,
+									 ena       => ena_Timer_E1,
+									 syn_clr   => syn_clr_Timer_E1_S,
+									 max_tick  =>  Timer_E1_Maxtick,
+									 MAX_COUNT => STD_LOGIC_VECTOR(Millo_25));	
+
+Timer2: ENTITY WORK.univ_bin_c
+               GENERIC MAP	(	N	  => N)
+				   PORT MAP    (clk       => clk,
+									 rst       => reset,
+									 ena       => ena_Timer_E2,
+									 syn_clr   => syn_clr_Timer_E2_S,
+									 max_tick  =>  Timer_E2_Maxtick,
+									 MAX_COUNT => STD_LOGIC_VECTOR(Millo_25));	
+
+Timer3: ENTITY WORK.univ_bin_c
+               GENERIC MAP	(	N	  => N)
+				   PORT MAP    (clk       => clk,
+									 rst       => reset,
+									 ena       => ena_Timer_E3,
+									 syn_clr   => syn_clr_Timer_E3_S,
+									 max_tick  =>  Timer_E3_Maxtick,
+									 MAX_COUNT => STD_LOGIC_VECTOR(Millo_25));	
+
+Timer4: ENTITY WORK.univ_bin_c
+               GENERIC MAP	(	N	  => N)
+				   PORT MAP    (clk       => clk,
+									 rst       => reset,
+									 ena       => ena_Timer_E4,
+									 syn_clr   => syn_clr_Timer_E4_S,
+									 max_tick  =>  Timer_E4_Maxtick,
+									 MAX_COUNT => STD_LOGIC_VECTOR(Millo_25));
+
+Timer5: ENTITY WORK.univ_bin_c
+               GENERIC MAP	(	N	  => N)
+				   PORT MAP    (clk       => clk,
+									 rst       => reset,
+									 ena       => ena_Timer_E5,
+									 syn_clr   => syn_clr_Timer_E5_S,
+									 max_tick  =>  Timer_E5_Maxtick,
+									 MAX_COUNT => STD_LOGIC_VECTOR(Millo_25));										 
+
+END ARCHITECTURE movimiento;
